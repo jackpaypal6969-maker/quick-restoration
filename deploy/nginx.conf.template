@@ -1,0 +1,54 @@
+# Quick Restoration — Nginx reverse proxy.
+# Rendered by deploy/setup-vps.sh: __DOMAIN__ and __PORT__ are replaced.
+# Certbot (--nginx) adds the 443 server block and the HTTP->HTTPS redirect.
+
+# Defence-in-depth rate limit for the contact endpoint (the app also limits per IP).
+limit_req_zone $binary_remote_addr zone=qr_contact:1m rate=6r/m;
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name __DOMAIN__;
+
+    server_tokens off;
+    client_max_body_size 1m;
+
+    # Static build output: content-hashed; Next already sends the immutable Cache-Control.
+    location /_next/static/ {
+        proxy_pass http://127.0.0.1:__PORT__;
+        proxy_set_header Host $host;
+    }
+
+    # Optimised images from next/image (Next sets Cache-Control itself).
+    location /_next/image {
+        proxy_pass http://127.0.0.1:__PORT__;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /api/contact {
+        limit_req zone=qr_contact burst=5 nodelay;
+        limit_req_status 429;
+        client_max_body_size 16k;   # the app caps JSON bodies at 10 KB
+        proxy_pass http://127.0.0.1:__PORT__;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:__PORT__;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 60s;
+    }
+
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript image/svg+xml;
+    gzip_min_length 1024;
+}

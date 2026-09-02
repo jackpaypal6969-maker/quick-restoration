@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Quick Restoration design tokens
+   Palette is derived from the QuickDrain brand family: deep midnight indigo,
+   royal violet and electric cyan. Cyan is reserved for dark surfaces (it
+   fails contrast on white); violet is the primary on light surfaces.
+   ────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* Surfaces (dark) */
+  --color-midnight-950: #07041a;
+  --color-midnight-900: #0f0a28;
+  --color-midnight-800: #171040;
+  --color-midnight-700: #221856;
+  --color-midnight-600: #2e2270;
+
+  /* Brand primary (violet) */
+  --color-royal-700: #4a1db0;
+  --color-royal-600: #5b21d6;
+  --color-royal-500: #6d32f0;
+  --color-royal-400: #8b5cf6;
+  --color-royal-300: #b69cff;
+  --color-royal-100: #ece4ff;
+
+  /* Accent (cyan) — dark surfaces only */
+  --color-electric-600: #06afc4;
+  --color-electric-500: #0fc5db;
+  --color-electric-400: #22d3ee;
+  --color-electric-300: #67e8f9;
+  --color-electric-200: #a5f3fc;
+  --color-electric-100: #d9fbff;
+
+  /* Surfaces (light) */
+  --color-ice-50: #f5fbfd;
+  --color-ice-100: #e9f5f9;
+  --color-ice-200: #d6ebf2;
+
+  /* Text on light */
+  --color-ink-950: #0b0722;
+  --color-ink-900: #14102b;
+  --color-ink-700: #3d3858;
+  --color-ink-500: #6c678a;
+  --color-ink-300: #a9a5be;
+  --color-ink-200: #d3d0e0;
+
+  /* Type */
+  --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Elevation */
+  --shadow-glow: 0 0 0 1px rgb(34 211 238 / 0.35), 0 12px 48px -12px rgb(34 211 238 / 0.55);
+  --shadow-glow-violet: 0 0 0 1px rgb(139 92 246 / 0.35), 0 12px 48px -12px rgb(91 33 214 / 0.6);
+  --shadow-card: 0 1px 2px rgb(11 7 34 / 0.04), 0 12px 32px -12px rgb(11 7 34 / 0.14);
+  --shadow-card-hover: 0 2px 4px rgb(11 7 34 / 0.05), 0 24px 48px -16px rgb(11 7 34 / 0.22);
+  --shadow-card-dark: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 24px 60px -24px rgb(0 0 0 / 0.7);
+
+  /* Animations */
+  --animate-marquee: marquee 45s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.2s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.55); opacity: 0.75; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+  body {
+    @apply bg-white font-sans text-ink-900 antialiased;
+    font-feature-settings: "ss01", "cv11", "kern";
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-electric-300);
+    color: var(--color-midnight-950);
+  }
+  /* Focus ring colour is surface-scoped: violet on light surfaces, cyan on dark
+     (cyan is 2:1 on white). Dark roots opt in via data-tone="dark", the
+     surface-dark utility or bg-midnight-radial; white panels inside a dark
+     root opt back out with surface-light / data-tone="light". */
+  :root {
+    --focus-ring: var(--color-royal-600);
+  }
+  [data-tone="dark"] {
+    --focus-ring: var(--color-electric-400);
+  }
+  [data-tone="light"] {
+    --focus-ring: var(--color-royal-600);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+  p, li {
+    text-wrap: pretty;
+  }
+  img, video, svg {
+    display: block;
+    max-width: 100%;
+  }
+  button, [role="button"], a {
+    cursor: pointer;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      animation-fill-mode: forwards !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Layout helpers */
+@utility container-x {
+  @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+}
+@utility section-y {
+  @apply py-20 md:py-28 lg:py-32;
+}
+@utility eyebrow {
+  @apply font-sans text-[0.8125rem] font-bold uppercase tracking-[0.18em];
+}
+
+/* Surfaces */
+/* Focus-ring scope for dark roots (footer, overlays, call bar, dark sections)
+   and for light panels nested inside them. */
+@utility surface-dark {
+  --focus-ring: var(--color-electric-400);
+}
+@utility surface-light {
+  --focus-ring: var(--color-royal-600);
+}
+@utility glass {
+  background: rgb(255 255 255 / 0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgb(255 255 255 / 0.1);
+}
+@utility glass-light {
+  background: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgb(11 7 34 / 0.08);
+}
+
+/* Text treatments */
+@utility text-gradient-electric {
+  background-image: linear-gradient(115deg, #a5f3fc 0%, #22d3ee 45%, #b69cff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility text-gradient-royal {
+  background-image: linear-gradient(115deg, #4a1db0 0%, #6d32f0 55%, #06afc4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Decorative backgrounds */
+@utility bg-midnight-radial {
+  --focus-ring: var(--color-electric-400);
+  background-color: var(--color-midnight-900);
+  background-image:
+    radial-gradient(1200px 600px at 85% -10%, rgb(91 33 214 / 0.45), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgb(34 211 238 / 0.22), transparent 60%);
+}
+@utility bg-grid-faint {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
