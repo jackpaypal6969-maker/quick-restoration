@@ -4,10 +4,19 @@ import { cn } from "@/lib/utils";
 import { ServiceIcon } from "@/components/services/ServiceIcon";
 import { padIndex } from "@/components/services/helpers";
 
+export type ServiceIconTileVariant = "medallion" | "bubble";
+
 interface ServiceIconTileProps {
   icon: ServiceIconKey;
-  /** 0-based position in the services list; rendered as a faint "01" watermark. */
+  /** 0-based position in the services list; rendered as a faint "01" watermark (medallion variant only). */
   index: number;
+  /**
+   * "medallion" (default): small glass medallion bottom-left ("md") or centred ("lg") over the
+   * numeral watermark; carries `title`/`items` on the /services feature rows.
+   * "bubble": one large centred glass bubble with a cyan glow and an outer ring, no numeral;
+   * the home-page ServiceCard tile. `size`, `title` and `items` are ignored.
+   */
+  variant?: ServiceIconTileVariant;
   /** "md" = card header (icon bottom-left); "lg" = feature row (icon centred). */
   size?: "md" | "lg";
   /**
@@ -26,14 +35,24 @@ const medallionClass =
   "shadow-[0_0_0_1px_rgb(34_211_238/0.12)] transition-shadow duration-500 ease-out-expo group-hover:shadow-glow";
 
 /**
- * Midnight tile with a violet/cyan bloom, a faint numeral watermark and the
- * service icon in a glass circle. Every service gets this treatment so grids
- * stay uniform whether or not a photo exists. Place inside a `group` and the
- * bloom brightens on hover.
+ * Midnight tile with a violet/cyan bloom and a faint grid, carrying either the
+ * service icon in a glass medallion over a numeral watermark (default) or one
+ * large centred glass bubble (variant="bubble"). Every service gets this
+ * treatment so grids stay uniform whether or not a photo exists. Place inside
+ * a `group` and the bloom (and the bubble's glow) brighten on hover.
  */
-export function ServiceIconTile({ icon, index, size = "md", title, items, className }: ServiceIconTileProps) {
+export function ServiceIconTile({
+  icon,
+  index,
+  variant = "medallion",
+  size = "md",
+  title,
+  items,
+  className,
+}: ServiceIconTileProps) {
+  const bubble = variant === "bubble";
   const large = size === "lg";
-  const withContent = Boolean(title);
+  const withContent = !bubble && Boolean(title);
   return (
     <div
       className={cn(
@@ -51,16 +70,34 @@ export function ServiceIconTile({ icon, index, size = "md", title, items, classN
           "group-hover:scale-110 group-hover:opacity-100",
         )}
       />
-      <span
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute right-2 -z-10 select-none font-display font-bold leading-none tracking-tighter text-white/6",
-          large || withContent ? "-bottom-5 text-[7rem] sm:text-[11rem]" : "-bottom-3 text-[6.5rem]",
-        )}
-      >
-        {padIndex(index)}
-      </span>
-      {withContent ? (
+      {!bubble && (
+        <span
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute right-2 -z-10 select-none font-display font-bold leading-none tracking-tighter text-white/6",
+            large || withContent ? "-bottom-5 text-[7rem] sm:text-[11rem]" : "-bottom-3 text-[6.5rem]",
+          )}
+        >
+          {padIndex(index)}
+        </span>
+      )}
+      {bubble ? (
+        /* Centred stage; absolute so the caller's display (hidden / sm:block) is untouched. */
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative size-24 md:size-28">
+            {/* Soft cyan glow behind the bubble (≈18% at rest); brightens on card hover, opacity only. */}
+            <span
+              aria-hidden
+              className="absolute -inset-[20%] rounded-full bg-electric-400/22 opacity-80 blur-2xl transition-opacity duration-500 ease-out-expo group-hover:opacity-100"
+            />
+            {/* Faint outer ring, 20% larger than the bubble, for depth. */}
+            <span aria-hidden className="absolute -inset-[10%] rounded-full ring-1 ring-white/5" />
+            <span className="absolute inset-0 flex items-center justify-center rounded-full bg-white/5 text-electric-300 ring-1 ring-white/15 backdrop-blur-md">
+              <ServiceIcon icon={icon} className="size-10 md:size-11" strokeWidth={1.5} />
+            </span>
+          </div>
+        </div>
+      ) : withContent ? (
         <>
           <span className={cn(medallionClass, "size-16")}>
             <ServiceIcon icon={icon} size={28} strokeWidth={1.75} />

@@ -1,0 +1,78 @@
+/*
+ * Hero entrance choreography as plain CSS so the LCP text paints as soon as the
+ * stylesheet lands instead of waiting for hydration. Every number mirrors the
+ * previous motion config: words rise 0.9s and fade blocks 0.8s on ease-out-expo
+ * (0.16, 1, 0.3, 1), each offset by --hero-delay. `both` fill holds the hidden
+ * start state through the delay (motion's `initial`) and the end state after.
+ */
+@keyframes hero-word-in {
+  from {
+    transform: translate3d(0, 125%, 0);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes hero-fade-in {
+  from {
+    transform: translate3d(0, var(--hero-y, 18px), 0);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.hero-word {
+  display: inline-block;
+  opacity: 1;
+  animation: hero-word-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--hero-delay, 0s) backwards;
+}
+
+.hero-fade {
+  opacity: 1;
+  animation: hero-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) var(--hero-delay, 0s) backwards;
+}
+
+/*
+ * will-change is scoped to these two classes only: that is roughly a dozen
+ * elements in the hero (headline words + five fade blocks). Promoting them up
+ * front avoids a layer-creation hitch on the first animated frame, while a
+ * blanket will-change would pin a compositor layer (and its memory) for every
+ * element on the page.
+/*
+ * Scroll-cue tick. Motion ran a 1.8s ease-in-out sweep from -100% to 200% with
+ * a 0.4s repeatDelay, i.e. a 2.2s cycle where the tick parks at 200% for the
+ * last 0.4s: 1.8 / 2.2 = 81.8182%. Motion's "easeInOut" is (0.42, 0, 0.58, 1).
+ */
+@keyframes hero-tick {
+  0% {
+    transform: translate3d(0, -100%, 0);
+  }
+  81.8182%,
+  100% {
+    transform: translate3d(0, 200%, 0);
+  }
+}
+
+.hero-tick {
+  transform: translate3d(0, -100%, 0);
+  animation: hero-tick 2.2s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-word,
+  .hero-fade {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  /* The motion version rendered no tick at all under reduced motion. */
+  .hero-tick {
+    display: none;
+  }
+}

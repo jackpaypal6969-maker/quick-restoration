@@ -12,7 +12,7 @@ import {
   type MouseEvent,
   type PointerEvent,
 } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { ArrowRight, ChevronDown, Phone } from "lucide-react";
 import { services, siteConfig } from "@/config/site";
 import { cn, telHref } from "@/lib/utils";
@@ -184,7 +184,7 @@ export function ServicesMenu({ label, href, tone, active, triggerClassName }: Se
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             key="services-panel"
             id={panelId}
             ref={panelRef}
@@ -259,7 +259,7 @@ export function ServicesMenu({ label, href, tone, active, triggerClassName }: Se
                 </a>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </li>

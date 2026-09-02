@@ -249,7 +249,7 @@ export const services: Service[] = [
       { question: "Can you just spray it and paint over it?", answer: "No, and any contractor offering to is breaking state law and leaving the problem in your walls. Mold must be physically removed along with the moisture condition that caused it." },
       { question: "Is mold remediation covered by insurance?", answer: "Often, when the mold results from a covered water loss such as a burst pipe. Mold from long-term neglect or humidity usually is not. We will tell you what we see and document it for your adjuster." },
     ],
-    image: "",
+    image: "/images/services/mold-remediation.jpg",
     imageAlt: "Technician in protective gear inside a negative-pressure mold containment",
     metaTitle: "Licensed Mold Remediation on Long Island",
     metaDescription:
@@ -286,7 +286,7 @@ export const services: Service[] = [
       { question: "Why does the smell keep coming back?", answer: "Smoke odor bonds to porous materials and hides inside ducts and wall cavities. Air fresheners mask it; only source removal and molecular deodorization eliminate it." },
       { question: "Do you clean furniture and clothing?", answer: "Yes. We inventory, clean and, where needed, store contents off-site while the structure is restored." },
     ],
-    image: "",
+    image: "/images/services/smoke-soot.jpg",
     imageAlt: "Technician cleaning smoke residue from a living room wall",
     metaTitle: "Smoke & Soot Cleanup on Long Island",
     metaDescription:
@@ -323,7 +323,7 @@ export const services: Service[] = [
       { question: "Is sewage cleanup covered by insurance?", answer: "Many policies exclude sewer backup unless you carry a water/sewer backup endorsement. Check your declarations page; we will document the loss either way." },
       { question: "Do you fix the sewer line?", answer: "We handle the cleanup and restoration and coordinate with your plumber or cesspool company for the repair." },
     ],
-    image: "",
+    image: "/images/services/sewage-cleanup.jpg",
     imageAlt: "Technicians in protective suits extracting water from a contaminated basement",
     metaTitle: "Sewage & Biohazard Cleanup on Long Island",
     metaDescription:
@@ -360,7 +360,7 @@ export const services: Service[] = [
       { question: "Is storm surge covered?", answer: "Wind damage is covered by most homeowner policies. Rising water from surge or tidal flooding requires flood insurance. We document both separately." },
       { question: "Can you handle my roof replacement?", answer: "Yes. Our reconstruction team includes licensed roofing and siding crews." },
     ],
-    image: "",
+    image: "/images/services/storm-damage.jpg",
     imageAlt: "Crew tarping a storm-damaged roof on a Long Island home",
     metaTitle: "Storm & Wind Damage Restoration on Long Island",
     metaDescription:
@@ -397,7 +397,7 @@ export const services: Service[] = [
       { question: "Can I wipe the soot off myself?", answer: "Please don't. Oily soot smears and sets permanently with ordinary cleaners. Leave surfaces untouched until we arrive." },
       { question: "Is it safe to run the furnace?", answer: "No. Have your heating contractor repair it first; running it again can cause a second puff back." },
     ],
-    image: "",
+    image: "/images/services/puff-back.jpg",
     imageAlt: "Technician cleaning oily soot residue from a wall near a heating vent",
     metaTitle: "Puff Back Cleanup on Long Island",
     metaDescription:
@@ -434,7 +434,7 @@ export const services: Service[] = [
       { question: "Can you upgrade materials during the rebuild?", answer: "Yes. Insurance covers like-for-like replacement; you can pay the difference for upgrades and we will itemize it clearly." },
       { question: "Do you pull permits?", answer: "Yes. All work requiring a permit is filed with your town or the NYC Department of Buildings as applicable." },
     ],
-    image: "",
+    image: "/images/services/reconstruction.jpg",
     imageAlt: "Carpenter finishing drywall in a rebuilt Long Island living room",
     metaTitle: "Reconstruction & Rebuild Services on Long Island",
     metaDescription:

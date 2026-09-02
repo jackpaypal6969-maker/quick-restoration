@@ -21,11 +21,20 @@ type ButtonProps = BaseProps & Omit<ButtonHTMLAttributes<HTMLButtonElement>, key
 
 const base =
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-sans font-semibold " +
-  "select-none transition-[transform,background-color,color,box-shadow,border-color] duration-300 ease-out-expo " +
+  "select-none transition-[transform,scale,background-color,color,border-color] duration-300 ease-out-expo " +
   "active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60";
 
+/**
+ * Hover shadow for variants that lift: crossfaded in on an `after:`
+ * pseudo-element so only opacity animates (no box-shadow repaint). The resting
+ * shadow stays on the element itself.
+ */
+const hoverShadowCard =
+  "relative isolate after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] " +
+  "after:shadow-card-hover after:opacity-0 after:transition-opacity after:duration-300 after:ease-out-expo hover:after:opacity-100";
+
 const variants: Record<ButtonVariant, string> = {
-  primary: "bg-royal-600 text-white shadow-card hover:bg-royal-500 hover:shadow-card-hover",
+  primary: `bg-royal-600 text-white shadow-card hover:bg-royal-500 ${hoverShadowCard}`,
   accent: "bg-electric-400 text-midnight-950 shadow-glow hover:bg-electric-300",
   outline: "border border-ink-900/15 text-ink-900 hover:border-ink-900/40 hover:bg-ink-900/5",
   "outline-light": "border border-white/25 text-white hover:border-white/60 hover:bg-white/10",

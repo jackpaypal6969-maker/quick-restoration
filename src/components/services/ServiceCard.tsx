@@ -7,7 +7,7 @@ import { ServiceIconTile } from "@/components/services/ServiceIconTile";
 
 interface ServiceCardProps {
   service: Service;
-  /** 0-based index in the services list; drives the tile's numeral watermark. */
+  /** 0-based index in the services list; passed through to the tile (the bubble tile shows no numeral). */
   index: number;
   className?: string;
 }
@@ -16,8 +16,14 @@ interface ServiceCardProps {
  * Icon-led service card; the whole card is one link (keyboard focus shows the
  * surface-scoped ring from globals.css). Below `sm` it is a compact
  * horizontal row (small glowing icon tile, title, tagline, chevron) so eight
- * services fit on a phone screen or two; from `sm` up it is the tall tile card.
- * Uniform for all eight services (no photos here).
+ * services fit on a phone screen or two; from `sm` up it is the tall tile card
+ * with one large centred icon bubble. Uniform for all eight services (no
+ * photos here).
+ *
+ * Hover shadow: from `sm` up it crossfades in on an `after:` pseudo-element so
+ * only opacity animates (no box-shadow repaint). Below `sm` the row clips
+ * overflow (it trims the compact tile's glow), which would clip that
+ * pseudo-element too, so the mobile row keeps its box-shadow transition as is.
  */
 export function ServiceCard({ service, index, className }: ServiceCardProps) {
   const titleId = `service-card-${service.slug}-title`;
@@ -29,9 +35,11 @@ export function ServiceCard({ service, index, className }: ServiceCardProps) {
       aria-labelledby={titleId}
       aria-describedby={taglineId}
       className={cn(
-        "group flex h-full items-center gap-4 overflow-hidden rounded-2xl bg-white p-4 shadow-card ring-1 ring-ink-900/5",
-        "sm:flex-col sm:items-stretch sm:gap-0 sm:rounded-3xl sm:p-0",
-        "transition-[transform,box-shadow] duration-300 ease-out-expo hover:-translate-y-1 hover:shadow-card-hover",
+        "group relative isolate flex h-full items-center gap-4 overflow-hidden rounded-2xl bg-white p-4 shadow-card ring-1 ring-ink-900/5",
+        "sm:flex-col sm:items-stretch sm:gap-0 sm:overflow-visible sm:rounded-3xl sm:p-0",
+        "transition-transform duration-300 ease-out-expo hover:-translate-y-1",
+        "after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:shadow-card-hover after:opacity-0 after:transition-opacity after:duration-300 after:ease-out-expo hover:after:opacity-100",
+        "max-sm:transition-[transform,translate,box-shadow] max-sm:hover:shadow-card-hover",
         className,
       )}
     >
@@ -48,8 +56,13 @@ export function ServiceCard({ service, index, className }: ServiceCardProps) {
         <ServiceIcon icon={service.icon} size={26} className="relative" />
       </span>
 
-      {/* Tall tile (sm and up). */}
-      <ServiceIconTile icon={service.icon} index={index} className="hidden aspect-[16/10] sm:block" />
+      {/* Tall tile (sm and up). The card no longer clips overflow at sm, so the tile rounds its own top corners. */}
+      <ServiceIconTile
+        icon={service.icon}
+        index={index}
+        variant="bubble"
+        className="hidden aspect-[16/10] sm:block sm:rounded-t-3xl"
+      />
 
       <span className="flex min-w-0 flex-1 flex-col gap-1 sm:gap-3 sm:p-6">
         <h3

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { m, useScroll, useTransform } from "motion/react";
 import { Menu, Phone, X } from "lucide-react";
 import { nav, siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/Button";
@@ -130,7 +130,7 @@ export function Header() {
 
   return (
     <>
-      <motion.header
+      <m.header
         ref={headerRef}
         className="fixed inset-x-0 top-0 z-50"
         style={{ y: headerY }}
@@ -280,7 +280,7 @@ export function Header() {
             </div>
           </Container>
         </div>
-      </motion.header>
+      </m.header>
 
       <MobileMenu id={MOBILE_MENU_ID} open={menuOpen} onClose={() => closeMenu(false)} panelRef={menuRef} />
     </>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { CalendarClock, CheckCircle2, ChevronDown, ClipboardList, LoaderCircle, Phone, Siren } from "lucide-react";
 import { z } from "zod";
 import { services, siteConfig } from "@/config/site";
@@ -242,7 +242,7 @@ export function ContactForm({ className, intro }: ContactFormProps) {
 
   if (status === "success") {
     return (
-      <motion.div
+      <m.div
         initial={reduce ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0 : 0.5, ease }}
@@ -266,7 +266,7 @@ export function ContactForm({ className, intro }: ContactFormProps) {
             Call {siteConfig.phone}
           </Button>
         </div>
-      </motion.div>
+      </m.div>
     );
   }
 
@@ -332,7 +332,7 @@ export function ContactForm({ className, intro }: ContactFormProps) {
             {/* Slim inline notice directly under the selector: the phone is the fastest path for an emergency. */}
             <AnimatePresence initial={false}>
               {values.urgency === "emergency" && (
-                <motion.div
+                <m.div
                   key="emergency-notice"
                   initial={reduce ? false : { opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -351,7 +351,7 @@ export function ContactForm({ className, intro }: ContactFormProps) {
                     </a>{" "}
                     now. A dispatcher answers 24/7.
                   </p>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
           </fieldset>

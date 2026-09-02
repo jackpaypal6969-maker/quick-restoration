@@ -42,7 +42,9 @@ export function AreaPicker() {
                 onBlur={() => setActive(null)}
                 className={cn(
                   "group flex w-full flex-col rounded-3xl bg-white/5 p-6 shadow-card-dark ring-1 ring-white/10 sm:p-8",
-                  "transition-[transform,background-color,box-shadow] duration-300 ease-out-expo hover:-translate-y-1 hover:bg-white/8",
+                  // box-shadow stays in the transition list: there is no hover shadow here, it eases the
+                  // active ring colour (a ring utility sharing box-shadow with shadow-card-dark's inset line).
+                  "transition-[transform,translate,background-color,box-shadow] duration-300 ease-out-expo hover:-translate-y-1 hover:bg-white/8",
                   isActive && "bg-white/8 ring-electric-400/50",
                 )}
               >

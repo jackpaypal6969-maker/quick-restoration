@@ -183,7 +183,7 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <p className="mt-4 max-w-[14rem] text-xs leading-relaxed text-white/45">
+            <p className="mt-4 max-w-[14rem] text-xs leading-relaxed text-white/60">
               On-site target: {siteConfig.responseTime.toLowerCase()} anywhere in {siteConfig.serviceRegion}.
             </p>
           </nav>

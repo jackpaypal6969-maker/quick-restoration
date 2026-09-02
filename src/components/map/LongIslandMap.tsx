@@ -2,7 +2,7 @@
 
 import { useId, useState, type KeyboardEvent, type MouseEvent } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { siteConfig } from "@/config/site";
 import {
   CONTEXT_COUNTIES,
@@ -311,7 +311,7 @@ function HubRings({ index, reduce }: { index: number; reduce: boolean }) {
   return (
     <>
       {Array.from({ length: RING_COUNT }, (_, ring) => (
-        <motion.span
+        <m.span
           key={ring}
           className={RING_CLASS}
           initial={{ scale: 0.3, opacity: 0 }}

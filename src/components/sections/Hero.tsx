@@ -9,6 +9,7 @@ import { HeroHeadline } from "@/components/sections/hero/HeroHeadline";
 import { HeroFadeIn } from "@/components/sections/hero/HeroFadeIn";
 import { ResponsePulse } from "@/components/sections/hero/ResponsePulse";
 import { ScrollCue } from "@/components/sections/hero/ScrollCue";
+import "./hero/hero.css";
 
 type CredentialKey = (typeof siteConfig.credentials)[number]["key"];
 

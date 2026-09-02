@@ -8,12 +8,16 @@ interface AreaCardProps {
   area: ServiceArea;
 }
 
-/** Light card linking to an area page: county, name, headline, response note. */
+/**
+ * Light card linking to an area page: county, name, headline, response note.
+ * The hover shadow crossfades in on an `after:` pseudo-element so only
+ * opacity animates (no box-shadow repaint).
+ */
 export function AreaCard({ area }: AreaCardProps) {
   return (
     <Link
       href={areaHref(area)}
-      className="group flex h-full flex-col rounded-3xl bg-white p-6 shadow-card ring-1 ring-ink-900/5 transition-[transform,box-shadow] duration-300 ease-out-expo hover:-translate-y-1 hover:shadow-card-hover sm:p-8"
+      className="group relative isolate flex h-full flex-col rounded-3xl bg-white p-6 shadow-card ring-1 ring-ink-900/5 transition-transform duration-300 ease-out-expo after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:shadow-card-hover after:opacity-0 after:transition-opacity after:duration-300 after:ease-out-expo hover:-translate-y-1 hover:after:opacity-100 sm:p-8"
     >
       <Eyebrow>{countyEyebrow(area)}</Eyebrow>
       <span className="mt-3 block font-display text-2xl font-bold leading-tight text-ink-950">{area.name}</span>

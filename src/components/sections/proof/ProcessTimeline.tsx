@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { m, useScroll, useTransform, type MotionValue } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
 import { usePrefersReducedMotion } from "@/components/layout/hooks";
@@ -72,7 +72,7 @@ function TimelineStep({ index, count, step, progress, reduce }: TimelineStepProp
           data-motion lets the global <noscript> rule draw everything without JS. */}
       <span aria-hidden className="absolute left-0 top-0 flex size-6 items-center justify-center">
         <span className="absolute inset-0 rounded-full border border-ink-900/15 bg-white" />
-        <motion.span
+        <m.span
           data-motion
           style={reduce ? { scale: 1, opacity: 1 } : { scale: dot, opacity: dot }}
           className="relative size-2.5 rounded-full bg-royal-600 shadow-[0_0_0_4px_rgb(91_33_214/0.16)]"
@@ -83,7 +83,7 @@ function TimelineStep({ index, count, step, progress, reduce }: TimelineStepProp
         <>
           {/* Vertical segment (mobile): from the dot's base across the row gap to the next dot */}
           <span aria-hidden className="absolute -bottom-10 left-3 top-6 w-px -translate-x-1/2 bg-ink-900/10 lg:hidden">
-            <motion.span
+            <m.span
               data-motion
               style={reduce ? { scaleY: 1 } : { scaleY: segment }}
               className="absolute inset-0 origin-top bg-royal-600"
@@ -91,7 +91,7 @@ function TimelineStep({ index, count, step, progress, reduce }: TimelineStepProp
           </span>
           {/* Horizontal segment (lg): from the dot's edge across the column gap to the next dot */}
           <span aria-hidden className="absolute -right-8 left-6 top-3 hidden h-px -translate-y-1/2 bg-ink-900/10 lg:block">
-            <motion.span
+            <m.span
               data-motion
               style={reduce ? { scaleX: 1 } : { scaleX: segment }}
               className="absolute inset-0 origin-left bg-linear-to-r from-royal-600 to-royal-500"

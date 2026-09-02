@@ -17,6 +17,10 @@ function initials(name: string) {
 /**
  * Client reviews in a three-column masonry on lg. Shows a discreet notice
  * while config still carries sample reviews.
+ *
+ * Card hover shadow crossfades in on an `after:` pseudo-element so only
+ * opacity animates (no box-shadow repaint). The figure therefore no longer
+ * clips overflow; the corner quote mark is clipped by its own wrapper instead.
  */
 export function Testimonials() {
   return (
@@ -34,8 +38,11 @@ export function Testimonials() {
         <div className="mt-12 columns-1 gap-6 md:mt-16 md:columns-2 lg:columns-3">
           {testimonials.items.map((t, i) => (
             <Reveal key={t.name} delay={(i % 3) * 0.08} y={20} className="mb-6 break-inside-avoid">
-              <figure className="relative overflow-hidden rounded-3xl bg-white p-7 shadow-card ring-1 ring-ink-900/5 transition-[transform,box-shadow] duration-300 ease-out-expo hover:-translate-y-1 hover:shadow-card-hover">
-                <Quote aria-hidden className="absolute -right-2 -top-2 size-16 text-royal-100" strokeWidth={1.25} />
+              <figure className="relative isolate rounded-3xl bg-white p-7 shadow-card ring-1 ring-ink-900/5 transition-transform duration-300 ease-out-expo after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:shadow-card-hover after:opacity-0 after:transition-opacity after:duration-300 after:ease-out-expo hover:-translate-y-1 hover:after:opacity-100">
+                {/* Corner quote mark, clipped to the card's rounding. */}
+                <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]">
+                  <Quote aria-hidden className="absolute -right-2 -top-2 size-16 text-royal-100" strokeWidth={1.25} />
+                </span>
 
                 <div aria-hidden className="relative flex gap-1 text-royal-500">
                   {Array.from({ length: 5 }, (_, s) => (

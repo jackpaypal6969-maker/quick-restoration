@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { animate, useInView } from "motion/react";
+import { animate } from "motion";
 import { usePrefersReducedMotion } from "@/components/layout/hooks";
 
 interface StatCounterProps {
@@ -20,6 +20,9 @@ const PREFIX_WORDS: Record<string, string> = {
   "~": "About ",
 };
 
+/** Same viewport window motion's useInView used: { once: true, margin: "0px 0px -10% 0px" }, amount "some". */
+const IN_VIEW_OPTIONS: IntersectionObserverInit = { rootMargin: "0px 0px -10% 0px", threshold: 0 };
+
 /**
  * Stat value for the trust bar. Numeric-looking values count up from 0 when
  * scrolled into view (keeping any prefix such as "<"); everything else renders
@@ -32,11 +35,25 @@ export function StatCounter({ value, suffix }: StatCounterProps) {
 
   const reduce = usePrefersReducedMotion();
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
   const shouldAnimate = match !== null && !reduce;
 
   // Start on the final value so SSR / no-JS / reduced-motion all show the real number.
   const [current, setCurrent] = useState(target);
+  // Flips to true on the first intersection and never back (motion's `once: true`).
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || inView) return;
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        setInView(true);
+        observer.disconnect();
+      }
+    }, IN_VIEW_OPTIONS);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [inView]);
 
   useEffect(() => {
     if (!shouldAnimate || !inView) return;

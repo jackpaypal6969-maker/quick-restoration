@@ -141,6 +141,35 @@
   }
 }
 
+/* Scroll reveal (src/components/ui/Reveal.tsx). Hidden until the inline
+   IntersectionObserver in the root layout sets data-revealed, so entrances do
+   not wait for hydration. Same 0.9s / cubic-bezier(0.16,1,0.3,1) curve, y and
+   delay motion used before, so it is visually identical. */
+@layer components {
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 28px), 0) scale(var(--reveal-scale, 1));
+    transition:
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0s),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0s);
+  }
+  /* Only while about to animate; dropped after the transition ends. */
+  .reveal[data-reveal-pending] {
+    will-change: opacity, transform;
+  }
+  .reveal[data-revealed] {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
 /* Layout helpers */
 @utility container-x {
   @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;

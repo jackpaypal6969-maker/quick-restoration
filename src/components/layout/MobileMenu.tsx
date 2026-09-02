@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, type RefObject } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { ArrowRight, ArrowUpRight, Phone } from "lucide-react";
 import { nav, services, siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/Button";
@@ -52,7 +52,7 @@ export function MobileMenu({ id, open, onClose, panelRef }: MobileMenuProps) {
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
+        <m.div
           key="mobile-menu"
           id={id}
           ref={panelRef}
@@ -79,7 +79,7 @@ export function MobileMenu({ id, open, onClose, panelRef }: MobileMenuProps) {
                 {primary.map((item, index) => {
                   const hasChildren = "children" in item && item.children;
                   return (
-                    <motion.li key={item.href} className="border-b border-white/10" {...itemMotion(index)}>
+                    <m.li key={item.href} className="border-b border-white/10" {...itemMotion(index)}>
                       <Link
                         ref={index === 0 ? firstLinkRef : undefined}
                         href={item.href}
@@ -112,13 +112,13 @@ export function MobileMenu({ id, open, onClose, panelRef }: MobileMenuProps) {
                           })}
                         </ul>
                       )}
-                    </motion.li>
+                    </m.li>
                   );
                 })}
               </ul>
             </nav>
 
-            <motion.div className="mt-auto flex flex-col gap-3 pt-10" {...itemMotion(primary.length)}>
+            <m.div className="mt-auto flex flex-col gap-3 pt-10" {...itemMotion(primary.length)}>
               <Button href={telHref(siteConfig.phone)} variant="accent" size="lg" className="w-full">
                 <Phone aria-hidden className="size-[18px]" />
                 Call {siteConfig.phone}
@@ -140,9 +140,9 @@ export function MobileMenu({ id, open, onClose, panelRef }: MobileMenuProps) {
                   </span>
                 ))}
               </p>
-            </motion.div>
+            </m.div>
           </Container>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

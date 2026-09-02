@@ -11,7 +11,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { usePrefersReducedMotion } from "@/components/layout/hooks";
 import { cn } from "@/lib/utils";
@@ -180,7 +180,7 @@ export function AccordionItem({ value, title, children, className, headingLevel 
       ) : (
         <AnimatePresence initial={false}>
           {open && (
-            <motion.div
+            <m.div
               key="panel"
               id={panelId}
               role="region"
@@ -195,7 +195,7 @@ export function AccordionItem({ value, title, children, className, headingLevel 
               className="overflow-hidden"
             >
               {body}
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       )}
