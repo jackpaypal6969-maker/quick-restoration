@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHero } from "@/components/sections/PageHero";
+import { StepMedallion } from "@/components/visuals/StepIcons";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { areaHref } from "@/components/map/county-keys";
 
@@ -21,16 +22,20 @@ export const metadata: Metadata = buildMetadata({
   path: "/contact",
 });
 
+/** `medallion` is the `processSteps` index whose icon the step borrows (call, assess/document, insurance/walkthrough). */
 const NEXT_STEPS = [
   {
+    medallion: 2,
     title: "A dispatcher reads it",
     body: "Form requests reach the same 24/7 desk that answers the phone, not a shared inbox that gets checked in the morning.",
   },
   {
+    medallion: 0,
     title: "We call you back",
     body: "You get a call at the number you gave: quickly for anything active, the same day for estimates and questions.",
   },
   {
+    medallion: 1,
     title: "A crew or estimator is scheduled",
     body: "Active damage gets a crew with equipment on the truck. Estimates get a walkthrough and the documentation your insurer will ask for.",
   },
@@ -137,15 +142,12 @@ export default function ContactPage() {
                 <div className="px-1 sm:px-2">
                   <h2 className="font-display text-xl font-bold text-ink-950">What happens next</h2>
                   <ol className="mt-5 flex flex-col gap-5">
-                    {NEXT_STEPS.map((step, i) => (
+                    {NEXT_STEPS.map((step) => (
                       <li key={step.title} className="flex gap-4">
-                        <span
-                          aria-hidden
-                          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-royal-100 font-display text-sm font-bold text-royal-600"
-                        >
-                          {i + 1}
-                        </span>
-                        <div>
+                        {/* Light surface (ice-50), so the violet medallion. The badge would print the
+                            borrowed index (1, 3, 5) on a three-step list, so it is hidden here. */}
+                        <StepMedallion index={step.medallion} tone="light" size="md" className="[&>span]:hidden" />
+                        <div className="pt-1 md:pt-2">
                           <h3 className="font-sans text-base font-semibold text-ink-950">{step.title}</h3>
                           <p className="mt-1 text-sm leading-relaxed text-ink-700">{step.body}</p>
                         </div>

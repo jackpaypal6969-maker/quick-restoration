@@ -3,8 +3,10 @@ import { siteConfig } from "@/config/site";
 import { telHref } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ClaimFlow } from "@/components/visuals/ClaimFlow";
 
 const points: { icon: LucideIcon; text: string }[] = [
   { icon: BadgeDollarSign, text: "Direct billing to your carrier" },
@@ -15,13 +17,14 @@ const points: { icon: LucideIcon; text: string }[] = [
 
 /**
  * Dark insurance block: how the claim is handled on the left, the carrier
- * roster in a glass panel on the right. Text pills only, no carrier logos.
+ * roster in a glass panel on the right, and the four-step claim path as a
+ * full-width band beneath both. Text pills only, no carrier logos.
  */
 export function Insurance() {
   return (
     <section
       id="insurance"
-      className="surface-dark section-y relative isolate overflow-hidden bg-midnight-900 text-white"
+      className="surface-dark section-y relative isolate overflow-hidden bg-midnight-900 bg-grain text-white"
     >
       <div aria-hidden className="absolute inset-0 -z-10 bg-grid-faint opacity-30 mask-fade-x" />
       <div
@@ -85,6 +88,12 @@ export function Insurance() {
             </div>
           </Reveal>
         </div>
+
+        {/* Claim path: Call -> Document -> Estimate -> Direct bill, full width under both columns */}
+        <Reveal delay={0.1} className="mt-16 border-t border-white/10 pt-12 lg:mt-20 lg:pt-14">
+          <Eyebrow tone="dark">How your claim moves</Eyebrow>
+          <ClaimFlow tone="dark" className="mt-8 lg:mt-10" />
+        </Reveal>
       </Container>
     </section>
   );

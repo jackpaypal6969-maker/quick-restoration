@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { ArrowUpRight, BadgeCheck, Clock, MapPin, Phone, Timer } from "lucide-react";
+import { ArrowUpRight, Clock, MapPin, Phone, Timer } from "lucide-react";
 import { serviceAreas, siteConfig } from "@/config/site";
 import { telHref } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { credentialShortLabels } from "@/components/layout/brand-data";
+import { Seal } from "@/components/visuals/Seal";
+import { badgeCredentials } from "@/components/layout/brand-data";
 
 /** One-line hours for the side card; the full sentence is siteConfig.hours. */
 const HOURS_SHORT = "24/7, 365 days a year";
@@ -50,13 +51,14 @@ export function ServiceAside() {
         </div>
       </dl>
 
+      {/* Three seals with their short labels; the visible label carries the meaning, so each seal is decorative. */}
       <div className="mt-5 border-t border-white/10 pt-5">
         <h3 className="eyebrow text-white/50">Credentials</h3>
-        <ul className="mt-3 space-y-1.5 text-sm font-semibold text-white/85">
-          {siteConfig.credentials.map((credential) => (
-            <li key={credential.key} className="flex items-center gap-2.5">
-              <BadgeCheck aria-hidden className="size-4 shrink-0 text-electric-300" />
-              {credentialShortLabels[credential.key] ?? credential.label}
+        <ul className="mt-4 grid grid-cols-3 gap-2">
+          {badgeCredentials.map((credential) => (
+            <li key={credential.key} className="flex flex-col items-center gap-2 text-center">
+              <Seal kind={credential.key} tone="dark" size={72} decorative />
+              <span className="text-xs font-semibold leading-snug text-balance text-white/85">{credential.label}</span>
             </li>
           ))}
         </ul>

@@ -42,8 +42,9 @@ const TICK_DASH = `0.9 ${(TICK_PERIOD - 0.9).toFixed(3)}`;
 
 /* 9 o'clock -> 12 -> 3 o'clock, clockwise on screen. */
 const ARC_TOP = `M ${CENTER - R_TEXT_TOP},${CENTER} A ${R_TEXT_TOP},${R_TEXT_TOP} 0 1 1 ${CENTER + R_TEXT_TOP},${CENTER}`;
-/* 3 o'clock -> 6 -> 9 o'clock, counter-clockwise on screen. */
-const ARC_BOTTOM = `M ${CENTER + R_TEXT_BOTTOM},${CENTER} A ${R_TEXT_BOTTOM},${R_TEXT_BOTTOM} 0 0 0 ${CENTER - R_TEXT_BOTTOM},${CENTER}`;
+/* 9 o'clock -> 6 -> 3 o'clock, counter-clockwise on screen, so the glyphs' tops point at
+   the centre and the line reads left-to-right along the bottom of the ring. */
+const ARC_BOTTOM = `M ${CENTER - R_TEXT_BOTTOM},${CENTER} A ${R_TEXT_BOTTOM},${R_TEXT_BOTTOM} 0 0 0 ${CENTER + R_TEXT_BOTTOM},${CENTER}`;
 
 function diamond(cx: number, cy: number, r: number) {
   return `M ${cx - r},${cy} L ${cx},${cy - r} L ${cx + r},${cy} L ${cx},${cy + r} Z`;
@@ -52,7 +53,7 @@ function diamond(cx: number, cy: number, r: number) {
 const RING_TEXT_STYLE = {
   fontFamily: "var(--font-manrope), ui-sans-serif, system-ui, sans-serif",
   fontWeight: 700,
-  letterSpacing: "0.15em",
+  letterSpacing: "0.12em",
   fontFeatureSettings: "normal",
 } as const;
 
@@ -158,12 +159,12 @@ export function Seal({ kind, tone = "dark", size = 132, className, label, decora
         {/* Ring copy */}
         <path id={topId} d={ARC_TOP} fill="none" />
         <path id={bottomId} d={ARC_BOTTOM} fill="none" />
-        <text fill="currentColor" fontSize={10} textAnchor="middle" style={RING_TEXT_STYLE}>
+        <text fill="currentColor" fontSize={12.5} textAnchor="middle" style={RING_TEXT_STYLE}>
           <textPath href={`#${topId}`} startOffset="50%">
             {copy.top}
           </textPath>
         </text>
-        <text fill="currentColor" fontSize={10} textAnchor="middle" style={RING_TEXT_STYLE}>
+        <text fill="currentColor" fontSize={12.5} textAnchor="middle" style={RING_TEXT_STYLE}>
           <textPath href={`#${bottomId}`} startOffset="50%">
             {copy.bottom}
           </textPath>

@@ -2,8 +2,10 @@ import Image from "next/image";
 import { BadgeCheck, FileCheck, Gauge, ShieldCheck, Timer, type LucideIcon } from "lucide-react";
 import { getService, siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SealRow } from "@/components/visuals/Seal";
 import { countyList } from "@/components/services/helpers";
 
 type CredentialKey = (typeof siteConfig.credentials)[number]["key"];
@@ -21,8 +23,9 @@ function credential(key: CredentialKey) {
 const FALLBACK_IMAGE = { src: "/images/services/water-damage.jpg", alt: "Technician setting up drying equipment in a flooded Long Island basement" };
 
 /**
- * Dark differentiators section: four proof points on the left, a framed
- * photo with an overlapping glass stat card on the right.
+ * Dark differentiators section: four proof points and the three credential
+ * seals on the left, a framed photo with an overlapping glass stat card on
+ * the right.
  */
 export function WhyUs() {
   const iicrc = credential("iicrc");
@@ -43,7 +46,7 @@ export function WhyUs() {
   ].filter((point): point is Point => point !== null);
 
   return (
-    <section className="surface-dark section-y relative isolate overflow-hidden bg-midnight-950 text-white">
+    <section className="surface-dark section-y relative isolate overflow-hidden bg-midnight-950 bg-grain text-white">
       <div aria-hidden className="absolute inset-0 -z-10 bg-grid-faint opacity-20 mask-fade-x" />
       <div aria-hidden className="absolute -left-40 top-0 -z-10 size-[520px] rounded-full bg-royal-600/20 blur-3xl" />
 
@@ -69,6 +72,12 @@ export function WhyUs() {
                 </li>
               ))}
             </ul>
+
+            {/* 96px keeps the three seals on one line down to 360px phones; 112px wraps 2 + 1 at 375px. */}
+            <div className="mt-12 border-t border-white/10 pt-8">
+              <Eyebrow tone="dark">Credentials</Eyebrow>
+              <SealRow tone="dark" size={96} className="mt-6 gap-4 sm:gap-6" />
+            </div>
           </Reveal>
 
           <Reveal delay={0.15} className="relative pb-8 lg:pb-0">

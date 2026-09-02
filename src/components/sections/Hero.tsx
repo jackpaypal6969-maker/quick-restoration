@@ -47,8 +47,11 @@ export function Hero() {
         <div className="absolute inset-0 bg-linear-to-r from-midnight-950/70 via-midnight-950/25 to-transparent" />
       </div>
 
-      {/* Faint grid and a violet bloom at the top right */}
+      {/* Faint grid, film grain and a violet bloom at the top right. The grain is a
+          child layer here (not on the root) because bg-midnight-radial already owns
+          the root's background-image; mix-blend-soft-light gives the same blend. */}
       <div aria-hidden className="absolute inset-0 -z-10 bg-grid-faint opacity-40 mask-fade-x" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-grain mix-blend-soft-light" />
       <div
         aria-hidden
         className="absolute -right-40 top-16 -z-10 size-[560px] rounded-full bg-royal-600/25 blur-3xl"

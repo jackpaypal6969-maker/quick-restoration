@@ -3,9 +3,10 @@ import { notFound } from "next/navigation";
 import { ArrowRight, CheckCircle2, Phone } from "lucide-react";
 import { getService, services, siteConfig } from "@/config/site";
 import { buildMetadata } from "@/lib/seo";
-import { telHref } from "@/lib/utils";
+import { cn, telHref } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHero } from "@/components/sections/PageHero";
 import { OtherServices } from "@/components/services/OtherServices";
@@ -16,6 +17,8 @@ import { ServiceHeroArt } from "@/components/services/ServiceMedallion";
 import { ServiceJsonLd } from "@/components/services/ServiceJsonLd";
 import { ServiceSteps } from "@/components/services/ServiceSteps";
 import { countyList } from "@/components/services/helpers";
+import { DamageTimeline } from "@/components/visuals/DamageTimeline";
+import { EquipmentStrip } from "@/components/visuals/EquipmentStrip";
 
 interface ServicePageProps {
   params: Promise<{ slug: string }>;
@@ -38,6 +41,9 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
 }
 
 const h2 = "font-display text-2xl font-bold leading-tight text-ink-950 sm:text-3xl";
+
+/** Water-driven losses where the untreated-damage timeline earns its place. */
+const TIMELINE_SLUGS = new Set(["water-damage-restoration", "sewage-cleanup", "storm-damage-restoration"]);
 
 export default async function ServicePage({ params }: ServicePageProps) {
   const { slug } = await params;
@@ -84,6 +90,16 @@ export default async function ServicePage({ params }: ServicePageProps) {
                 ))}
               </Reveal>
 
+              {TIMELINE_SLUGS.has(service.slug) && (
+                <Reveal className="mt-14" y={20}>
+                  {/* The eyebrow is the heading: the timeline already names itself ("What happens if water waits"). */}
+                  <h2 id="speed">
+                    <Eyebrow>Why speed matters</Eyebrow>
+                  </h2>
+                  <DamageTimeline tone="light" className="mt-6" />
+                </Reveal>
+              )}
+
               <Reveal className="mt-14" y={20}>
                 <h2 id="included" className={h2}>
                   What&apos;s included
@@ -96,6 +112,15 @@ export default async function ServicePage({ params }: ServicePageProps) {
                     </li>
                   ))}
                 </ul>
+              </Reveal>
+
+              <Reveal className="mt-14" y={20}>
+                <Eyebrow>On the truck</Eyebrow>
+                <h2 id="equipment" className={cn(h2, "mt-3")}>
+                  What arrives with the crew
+                </h2>
+                {/* Three columns at lg: this content column is 42rem, too narrow for the strip's default six. */}
+                <EquipmentStrip tone="light" className="mt-6 lg:grid-cols-3" />
               </Reveal>
 
               <Reveal className="mt-14" y={20}>

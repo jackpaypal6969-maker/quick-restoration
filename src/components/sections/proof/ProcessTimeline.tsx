@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { m, useScroll, useTransform, type MotionValue } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
+import { StepMedallion } from "@/components/visuals/StepIcons";
 import { usePrefersReducedMotion } from "@/components/layout/hooks";
 
 export interface ProcessStep {
@@ -17,10 +18,11 @@ interface ProcessTimelineProps {
 }
 
 /**
- * Ordered timeline. Vertical rail with dots on small screens; one equal
- * column per step with a connecting line on lg. Each segment of the line
- * (and each dot) fills as the list scrolls through the viewport. Reduced
- * motion renders the line fully drawn.
+ * Ordered timeline. Vertical rail with a step medallion per entry on small
+ * screens; one equal column per step with a connecting line on lg. Each
+ * segment of the line fills as the list scrolls through the viewport and the
+ * medallion it reaches picks up a violet halo. Reduced motion renders the line
+ * fully drawn.
  */
 export function ProcessTimeline({ steps, className }: ProcessTimelineProps) {
   const ref = useRef<HTMLOListElement>(null);
@@ -58,39 +60,49 @@ interface TimelineStepProps {
 
 function TimelineStep({ index, count, step, progress, reduce }: TimelineStepProps) {
   const segments = Math.max(count - 1, 1);
-  const start = index / segments; // progress at which the line reaches this dot
+  const start = index / segments; // progress at which the line reaches this medallion
   const end = (index + 1) / segments; // ...and the next one
   const segment = useTransform(progress, [start, end], [0, 1]);
-  const dot = useTransform(progress, [Math.max(start - 0.04, 0), start + 0.01], [0, 1]);
+  const reached = useTransform(progress, [Math.max(start - 0.04, 0), start + 0.01], [0, 1]);
   const last = index === count - 1;
-  const number = String(index + 1).padStart(2, "0");
 
   return (
-    <li className="relative pl-12 lg:pl-0 lg:pt-12">
-      {/* Dot: hollow ring that fills violet when the line reaches it.
-          Reduced motion gets explicit final values so the SSR'd scale(0) never sticks;
-          data-motion lets the global <noscript> rule draw everything without JS. */}
-      <span aria-hidden className="absolute left-0 top-0 flex size-6 items-center justify-center">
-        <span className="absolute inset-0 rounded-full border border-ink-900/15 bg-white" />
+    // Medallion widths the padding and rail offsets are keyed to: 48px (size-12)
+    // below md, 56px (md:size-14) up to lg, 80px (the lg medallion's md:size-20)
+    // from lg. Text is padded so its first line sits level with the medallion.
+    <li className="relative pl-16 pt-3 md:pl-20 md:pt-4 lg:pl-0 lg:pt-26">
+      {/* Medallion on the rail (its badge carries the step number). The halo
+          fades in when the line reaches it, mirroring the old dot fill.
+          Reduced motion gets explicit final values so the SSR'd opacity never
+          sticks; data-motion lets the global <noscript> rule show it without JS. */}
+      <span aria-hidden className="absolute left-0 top-0 inline-flex">
         <m.span
           data-motion
-          style={reduce ? { scale: 1, opacity: 1 } : { scale: dot, opacity: dot }}
-          className="relative size-2.5 rounded-full bg-royal-600 shadow-[0_0_0_4px_rgb(91_33_214/0.16)]"
+          style={reduce ? { opacity: 1 } : { opacity: reached }}
+          className="absolute inset-0 rounded-full shadow-[0_0_0_4px_rgb(91_33_214/0.16)]"
         />
+        <StepMedallion index={index} tone="light" size="md" className="lg:hidden" />
+        <StepMedallion index={index} tone="light" size="lg" className="hidden lg:inline-flex" />
       </span>
 
       {!last && (
         <>
-          {/* Vertical segment (mobile): from the dot's base across the row gap to the next dot */}
-          <span aria-hidden className="absolute -bottom-10 left-3 top-6 w-px -translate-x-1/2 bg-ink-900/10 lg:hidden">
+          {/* Vertical segment (mobile): from the medallion's base across the row gap to the next medallion */}
+          <span
+            aria-hidden
+            className="absolute -bottom-10 left-6 top-12 w-px -translate-x-1/2 bg-ink-900/10 md:left-7 md:top-14 lg:hidden"
+          >
             <m.span
               data-motion
               style={reduce ? { scaleY: 1 } : { scaleY: segment }}
               className="absolute inset-0 origin-top bg-royal-600"
             />
           </span>
-          {/* Horizontal segment (lg): from the dot's edge across the column gap to the next dot */}
-          <span aria-hidden className="absolute -right-8 left-6 top-3 hidden h-px -translate-y-1/2 bg-ink-900/10 lg:block">
+          {/* Horizontal segment (lg): from the medallion's edge across the column gap to the next medallion */}
+          <span
+            aria-hidden
+            className="absolute -right-8 left-20 top-10 hidden h-px -translate-y-1/2 bg-ink-900/10 lg:block"
+          >
             <m.span
               data-motion
               style={reduce ? { scaleX: 1 } : { scaleX: segment }}
@@ -101,11 +113,7 @@ function TimelineStep({ index, count, step, progress, reduce }: TimelineStepProp
       )}
 
       <Reveal delay={index * 0.08} y={16}>
-        {/* The <ol> already conveys order to assistive tech; the number is visual. */}
-        <p aria-hidden className="font-display text-4xl font-bold leading-none tracking-tight text-royal-600 tabular-nums lg:text-5xl">
-          {number}
-        </p>
-        <h3 className="mt-4 font-display text-lg font-bold leading-snug text-ink-950">{step.title}</h3>
+        <h3 className="font-display text-lg font-bold leading-snug text-ink-950">{step.title}</h3>
         <p className="mt-2 text-sm leading-relaxed text-ink-700">{step.body}</p>
       </Reveal>
     </li>

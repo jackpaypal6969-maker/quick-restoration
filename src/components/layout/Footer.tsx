@@ -4,6 +4,7 @@ import { nav, serviceAreas, services, siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { LongIslandWatermark } from "@/components/visuals/LongIslandWatermark";
 import { telHref } from "@/lib/utils";
 import { CopyrightYear } from "./CopyrightYear";
 import { Logo } from "./Logo";
@@ -65,7 +66,17 @@ export function Footer() {
     areaNames.length > 1 ? `${areaNames.slice(0, -1).join(", ")} and ${areaNames[areaNames.length - 1]}` : areaNames[0];
 
   return (
-    <footer className="surface-dark relative overflow-hidden bg-midnight-950 text-white">
+    <footer className="surface-dark relative isolate overflow-hidden bg-midnight-950 text-white">
+      {/* Faint county outline behind the emergency band and brand column. Kept to the
+          top-left and faded toward the link columns so it never sits under small text. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-0 top-0 -z-10 aspect-[1000/494] w-full max-w-5xl"
+      >
+        <LongIslandWatermark tone="dark" />
+        <div className="absolute inset-0 bg-linear-to-r from-transparent from-30% to-midnight-950" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent from-45% to-midnight-950" />
+      </div>
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-electric-400/60 to-transparent"

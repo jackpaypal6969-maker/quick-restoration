@@ -231,6 +231,19 @@
     linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
   background-size: 64px 64px;
 }
+/* Film grain for midnight surfaces: a 200px tile of desaturated feTurbulence
+   noise at 6% opacity, blended soft-light into the element's own
+   background-color so it reads as texture, not tint (soft-light leaves the
+   surface untouched where the noise is mid-grey; on midnight the largest
+   per-pixel shift is ~2/255). Use on roots that set a background-color and no
+   background-image; where the root already owns background-image (Hero's
+   bg-midnight-radial) put it on a child layer with mix-blend-soft-light. */
+@utility bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  background-blend-mode: soft-light;
+}
 @utility mask-fade-x {
   mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);

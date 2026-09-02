@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { ArrowRight, Phone } from "lucide-react";
-import { getService, serviceAreas, siteConfig } from "@/config/site";
+import { serviceAreas, siteConfig } from "@/config/site";
 import { buildMetadata } from "@/lib/seo";
 import { telHref } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
@@ -12,9 +12,17 @@ import { PageHero } from "@/components/sections/PageHero";
 import { CompactCta } from "@/components/about/CompactCta";
 import { CredentialsList } from "@/components/about/CredentialsList";
 import { Pillars } from "@/components/about/Pillars";
+import { EquipmentStrip } from "@/components/visuals/EquipmentStrip";
+import { SealRow } from "@/components/visuals/Seal";
 
 const counties = serviceAreas.map((area) => area.shortName);
 const countySentence = `${counties.slice(0, -1).join(", ")} and ${counties[counties.length - 1]}`;
+
+/** Team photo (1600x1067): dim under the hero gradient, full in the "How we work" figure. */
+const TEAM_PHOTO = {
+  src: "/images/team.jpg",
+  alt: `The ${siteConfig.name} crew with their service vans at dawn`,
+} as const;
 
 export const metadata: Metadata = buildMetadata({
   title: "About Our Long Island Restoration Team",
@@ -29,21 +37,14 @@ const HOW_WE_WORK = [
 ];
 
 export default function AboutPage() {
-  const fireService = getService("fire-damage-restoration");
-  const heroAlt = `${siteConfig.name} service van and technicians outside a Long Island home at dusk.`;
-  /** "How we work" photo: the fire-damage service image when one exists, otherwise the site hero. */
-  const figure = fireService?.image
-    ? { src: fireService.image, alt: fireService.imageAlt, caption: "Fire and smoke restoration" }
-    : { src: "/images/hero.jpg", alt: heroAlt, caption: siteConfig.tagline };
-
   return (
     <>
       <PageHero
         eyebrow="About"
         title="Built for the worst day of your year"
         description={`${siteConfig.name} is a Long Island restoration company: IICRC certified crews, a New York State mold remediation license, and dispatch built around ${countySentence}.`}
-        image="/images/hero.jpg"
-        imageAlt={heroAlt}
+        image={TEAM_PHOTO.src}
+        imageAlt={TEAM_PHOTO.alt}
         breadcrumbs={[{ label: "About", href: "/about" }]}
         hideSecondaryOnMobile
       >
@@ -90,6 +91,9 @@ export default function AboutPage() {
               description="Certifications and licenses are only worth something if you can check them. Here is what we hold, and what each one actually covers."
             />
           </Reveal>
+          <Reveal className="mt-10 md:mt-12" y={16}>
+            <SealRow tone="dark" size={120} />
+          </Reveal>
           <div className="mt-10 md:mt-14">
             <CredentialsList />
           </div>
@@ -127,8 +131,8 @@ export default function AboutPage() {
                 />
                 <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-midnight-900 shadow-card-hover ring-1 ring-ink-900/10">
                   <Image
-                    src={figure.src}
-                    alt={figure.alt}
+                    src={TEAM_PHOTO.src}
+                    alt={TEAM_PHOTO.alt}
                     fill
                     sizes="(min-width: 1024px) 45vw, 100vw"
                     className="object-cover"
@@ -136,12 +140,27 @@ export default function AboutPage() {
                   <div aria-hidden className="absolute inset-0 bg-linear-to-t from-midnight-950/70 via-transparent to-transparent" />
                 </div>
                 <figcaption className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-sm text-white/85 sm:bottom-6 sm:left-6 sm:right-6">
-                  <span className="font-semibold">{figure.caption}</span>
+                  <span className="font-semibold">{siteConfig.tagline}</span>
                   <span className="text-white/60">Same crew, first call to final coat</span>
                 </figcaption>
               </figure>
             </Reveal>
           </div>
+        </Container>
+      </section>
+
+      <section aria-labelledby="equipment-heading" className="section-y bg-white">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="Equipment"
+              title={<span id="equipment-heading">What arrives with the crew</span>}
+              description="Extraction, drying, filtration and measurement gear rides on every truck, not on order, so work starts on the first visit."
+            />
+          </Reveal>
+          <Reveal className="mt-10 md:mt-14" y={20}>
+            <EquipmentStrip tone="light" />
+          </Reveal>
         </Container>
       </section>
 

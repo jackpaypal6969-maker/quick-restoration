@@ -13,6 +13,7 @@ import { ServiceIconTile } from "@/components/services/ServiceIconTile";
 import { ServiceMedallion } from "@/components/services/ServiceMedallion";
 import { ServiceCta } from "@/components/services/ServiceCta";
 import { countyList, padIndex } from "@/components/services/helpers";
+import { SealRow } from "@/components/visuals/Seal";
 
 export const metadata: Metadata = buildMetadata({
   title: "Restoration Services on Long Island",
@@ -58,6 +59,21 @@ export default function ServicesPage() {
           <ArrowRight aria-hidden className="size-5" />
         </Button>
       </PageHero>
+
+      {/* Slim credential strip: the three seals on midnight, directly under the hero. */}
+      <section className="surface-dark border-t border-white/10 bg-midnight-950 text-white">
+        <Container>
+          <Reveal
+            y={16}
+            className="flex flex-col items-center gap-6 py-10 md:flex-row md:justify-center md:gap-10 md:py-8"
+          >
+            <SealRow tone="dark" size={96} className="justify-center gap-4 sm:gap-6" />
+            <p className="text-center text-sm font-medium leading-relaxed text-white/70 md:text-left">
+              Certified, licensed and insured on every job.
+            </p>
+          </Reveal>
+        </Container>
+      </section>
 
       <section className="section-y bg-white">
         <Container>
