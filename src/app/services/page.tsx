@@ -11,6 +11,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PageHero } from "@/components/sections/PageHero";
 import { ServiceIconTile } from "@/components/services/ServiceIconTile";
 import { ServiceMedallion } from "@/components/services/ServiceMedallion";
+import { ServicePhotoTile } from "@/components/services/ServicePhotoTile";
 import { ServiceCta } from "@/components/services/ServiceCta";
 import { countyList, padIndex } from "@/components/services/helpers";
 import { SealRow } from "@/components/visuals/Seal";
@@ -100,21 +101,35 @@ export default function ServicesPage() {
                       i === 0 && "border-t-0",
                     )}
                   >
-                    {/* Desktop: content-carrying tile. Below lg a 64px medallion beside the heading stands in for it. */}
-                    <ServiceIconTile
-                      icon={service.icon}
-                      index={i}
-                      size="lg"
-                      title={service.shortName}
-                      items={topFeatures}
-                      className={cn(
-                        "hidden aspect-[4/3] rounded-3xl shadow-card ring-1 ring-ink-900/5 lg:flex",
-                        flip && "lg:order-2",
-                      )}
-                    />
+                    {/* The service photograph carries the tile; features overlay only from lg (listed below it on smaller screens). */}
+                    {service.image ? (
+                      <ServicePhotoTile
+                        image={service.image}
+                        imageAlt={service.imageAlt}
+                        icon={service.icon}
+                        title={service.shortName}
+                        items={topFeatures}
+                        priority={i === 0}
+                        className={cn(
+                          "aspect-[16/10] rounded-3xl shadow-card ring-1 ring-ink-900/5 lg:aspect-[4/3]",
+                          flip && "lg:order-2",
+                        )}
+                      />
+                    ) : (
+                      <ServiceIconTile
+                        icon={service.icon}
+                        index={i}
+                        size="lg"
+                        title={service.shortName}
+                        items={topFeatures}
+                        className={cn(
+                          "hidden aspect-[4/3] rounded-3xl shadow-card ring-1 ring-ink-900/5 lg:flex",
+                          flip && "lg:order-2",
+                        )}
+                      />
+                    )}
                     <div className={cn("flex flex-col gap-5", flip && "lg:order-1")}>
                       <div className="flex items-center gap-4">
-                        <ServiceMedallion icon={service.icon} tone="light" className="lg:hidden" />
                         <div className="flex flex-col gap-3">
                           <Eyebrow>Service {padIndex(i)}</Eyebrow>
                           <h2
