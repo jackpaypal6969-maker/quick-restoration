@@ -195,6 +195,12 @@ pm2 startup systemd -u root --hp /root >/dev/null 2>&1 || true
 
 # 7. Nginx + TLS (domain mode only) ------------------------------------------------
 if [[ "$PREVIEW" == "0" ]]; then
+  # Firewall: the site is now served by Nginx on 80/443; close the bare preview port if it was opened.
+  if command -v ufw >/dev/null 2>&1 && ufw status 2>/dev/null | grep -q "Status: active"; then
+    ufw allow 80/tcp >/dev/null 2>&1 || true
+    ufw allow 443/tcp >/dev/null 2>&1 || true
+    ufw delete allow "$PORT/tcp" >/dev/null 2>&1 || true
+  fi
   if [[ "$MODE" != "--update" || ! -f "$NGINX_SITE" ]]; then
     log "Writing nginx site $NGINX_SITE"
     sed -e "s#__DOMAIN__#$DOMAIN#g" -e "s#__PORT__#$PORT#g" deploy/nginx.conf.template > "$NGINX_SITE"
